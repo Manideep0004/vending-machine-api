@@ -36,6 +36,16 @@ def purchase(data: PurchaseRequest, db: Session = Depends(get_db)):
                     "inserted": inserted,
                 },
             )
+        if e.args[0] == "invalid_denomination":
+            raise HTTPException(
+                status_code=400,
+                detail="Cash inserted must use supported denominations"
+            )
+        if e.args[0] == "cannot_make_change":
+            raise HTTPException(
+                status_code=400,
+                detail="Cannot make change with available denominations"
+            )
         raise
 
 
